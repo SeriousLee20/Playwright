@@ -1,8 +1,5 @@
 import {chromium, test} from '@playwright/test';
 
-// test.use({ javaScriptEnabled: false });
-test.use({ userAgent: 'My user agent' });
-
 // browser can have multiple tabs open
 // passing page that is actually open
 // test.skip, test.only
@@ -25,8 +22,8 @@ test('Interacting with Page Elements', async({page}) => {
 test('Using multiple locator methods', async({page}) => {
 
     await page.goto('https://gitlab.com/');
-    await page.getByRole('button', {name: 'Main Menu'}).click();
-    await page.getByRole('link', {name: 'Sign in'}).click();
+    // await page.getByRole('button', {name: 'Main Menu'}).click();
+    // await page.getByRole('link', {name: 'Sign in'}).click();
     // await page.click(":has-text('Sign in')");
     // await page.waitForTimeout(5000);
 })
