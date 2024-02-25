@@ -2,7 +2,7 @@ import { expect, test } from "@playwright/test";
 
 test("Advance Interactions", async ({ page }) => {
   await page.goto(
-    "file:/Users/amber/Documents/Testing/Playwright/tests/advancedElement/index.html"
+    "file:///Users/amber/Documents/Testing/Playwright/tests/bestPractices/index.html"
   );
   await page.hover("button#hover-me");
   expect(await page.textContent("button#hover-me")).toContain("Text Changed!");
