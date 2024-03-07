@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>TypeScript Test Page</title>
+    <title>Playwright Demo Page</title>
     <style>
       /* Global Styles */
       body {
@@ -56,9 +56,9 @@
         background-color: #f9f9f9;
       }
 
-      .form-section input[type='text'],
-      .form-section input[type='number'],
-      .form-section input[type='checkbox'] {
+      .form-section input[type="text"],
+      .form-section input[type="number"],
+      .form-section input[type="checkbox"] {
         width: 100%;
         padding: 10px;
         margin: 5px 0;
@@ -74,41 +74,102 @@
       .display-section p {
         margin: 5px 0;
       }
+
+      /* iframe section */
+      .iframe-section {
+        width: 80%;
+        margin: 20px auto;
+        padding: 20px;
+        background-color: #fff;
+      }
+
+      iframe {
+        width: 100%;
+        height: 400px;
+        border: none;
+      }
+
+      .error-section {
+        color: red;
+      }
     </style>
   </head>
   <body>
     <div class="container">
-      <h1>TypeScript Concepts Test Page</h1>
-      <div class="button-section">
-        <button id="applyData">Apply</button>
-      </div>
+      <h1>Playwright Test Automation Demo Page</h1>
       <div class="form-section">
-        <label for="firstName">First Name:</label>
-        <input type="text" id="firstName" />
+        <label for="first-name">First Name:</label>
+        <input
+          type="text"
+          id="first-name"
+          placeholder="Please enter your first name"
+        />
         <label for="age">Age:</label>
-        <input type="number" id="age" />
-        <label for="isStudent">Student:</label>
-        <input type="checkbox" id="isStudent" />
+        <input
+          type="number"
+          min="1"
+          id="age"
+          placeholder="Please enter your age"
+        />
+        <label for="is-student">Student:</label>
+        <input type="checkbox" id="is-student" />
+      </div>
+      <div class="error-section" id="empty-field-error" style="display: none">
+        <p>Please fill in all fields.</p>
+      </div>
+      <div class="error-section" id="invalid-age-error" style="display: none">
+        <p>Invalid age.</p>
+      </div>
+      <div class="button-section">
+        <button id="apply-data">Apply</button>
       </div>
       <div class="display-section">
-        <p id="displayFirstName"></p>
-        <p id="displayAge"></p>
-        <p id="displayIsStudent"></p>
-        <p id="loadedData"></p>
+        <p id="display-first-name"></p>
+        <p id="display-age"></p>
+        <p id="display-is-student"></p>
       </div>
+    </div>
+    <div class="iframe-section">
+      <iframe
+        src="ISTQB_CTFL_Syllabus-v4.0.pdf"
+        name="iframe-demo"
+        frameborder="0"
+        height="400px"
+        title="Certified Testter Foundation Level v4.0"
+      >
+      </iframe>
     </div>
     <script>
       // Apply button click event handler
-      document.getElementById('applyData').addEventListener('click', () => {
+      document.getElementById("apply-data").addEventListener("click", () => {
         // Read input values
-        const firstName = document.getElementById('firstName').value;
-        const age = document.getElementById('age').value;
-        const isStudent = document.getElementById('isStudent').checked;
+        const firstName = document.getElementById("first-name").value;
+        const age = document.getElementById("age").value;
+        const isStudent = document.getElementById("is-student").checked;
+        const emptyFieldError = document.getElementById("empty-field-error");
+        const invalidAgeError = document.getElementById("invalid-age-error");
 
-        // Update display elements
-        document.getElementById('displayFirstName').textContent = firstName;
-        document.getElementById('displayAge').textContent = age;
-        document.getElementById('displayIsStudent').textContent = isStudent ? 'Yes' : 'No';
+        console.log(firstName, age);
+        if (firstName && age) {
+          if (age <= 0) {
+            invalidAgeError.style.display = "block";
+            emptyFieldError.style.display = "none";
+          } else {
+            // Update display elements
+            document.getElementById("display-first-name").textContent =
+              firstName;
+            document.getElementById("display-age").textContent = age;
+            document.getElementById("display-is-student").textContent =
+              isStudent ? "Yes" : "No";
+
+            invalidAgeError.style.display = "none";
+            emptyFieldError.style.display = "none";
+          }
+        } else {
+          // Hide the error if displayed
+          invalidAgeError.style.display = "none";
+          emptyFieldError.style.display = "block";
+        }
       });
     </script>
   </body>

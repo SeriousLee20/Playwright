@@ -75,5 +75,13 @@ test.describe("Type Definitions and Interfaces", () => {
     expect(await page.textContent(SELECTORS.displayIsStudent)).toBe(
       user.isStudent ? "Yes" : "No"
     );
+
+    // screenshot (config to ss on failure)
+    await page.screenshot({path: 'fail.png'});
+
+    // troubleshoot response
+    page.on('response', (response)=>{
+      console.log(`Received from ${response.url}`);
+    })
   });
 });

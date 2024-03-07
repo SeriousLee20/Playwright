@@ -17,5 +17,27 @@
       "expectedFirstName": "Alice",
       "expectedAge": "25",
       "expectedIsStudent": "No"
+    },
+
+    {
+      "testName": "Test 1 - Invalid age",
+      "firstName": "Alice",
+      "age": "-2",
+      "isStudent": false,
+      "expectedFirstName": "Alice",
+      "expectedAge": "-2",
+      "expectedIsStudent": "No",
+      "expectedErrorText": "Invalid age."
+    },
+
+    {
+      "testName": "Test 1 - Empty field",
+      "firstName": "",
+      "age": "-2",
+      "isStudent": false,
+      "expectedFirstName": "",
+      "expectedAge": "-2",
+      "expectedIsStudent": "No",
+      "expectedErrorText": "Please fill in all fields."
     }
   ]

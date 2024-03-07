@@ -13,21 +13,57 @@ test.describe("Data Driven Test", () => {
     );
   });
 
+  // test('Check iframe loaded', async({page}) =>{
+  //   // let alertMessage = await pageObject.checkIframeLoaded();
+  //   let alertMessage = "";
+  //   page.on("dialog", async (dialog) => {
+  //     alertMessage = dialog.message();
+  //     await page.waitForTimeout(3000);
+  //     await dialog.accept();
+  //   });
+
+  //   page.waitForTimeout(3000)
+  //   expect(alertMessage).toBe('PDF loaded.')
+  // })
+
   for (const data of Object.values(testData)) {
     if (data.testName) {
       test(data.testName, async () => {
+        let age = data.age;
+        let ageInt: number = +age;
+
         await pageObject.fillFirstName(data.firstName);
-        await pageObject.fillAge(data.age);
+        await pageObject.fillAge(age);
         await pageObject.checkIsStudent(data.isStudent);
         await pageObject.applyData();
 
-        expect(await pageObject.text(pageObject.displayFirstNameSelector)).toBe(data.expectedFirstName);
-        expect(await pageObject.text(pageObject.displayAgeSelector)).toBe(data.expectedAge);
-        expect(await pageObject.text(pageObject.displayIsStudentSelector)).toBe(data.expectedIsStudent)
-        console.log(data.expectedIsStudent)
+        if (data.age && data.firstName) {
+          if (ageInt <= 0) {
+            expect(await pageObject.text(pageObject.invalidAgeError)).toBe(
+              data.expectedErrorText
+            );
+          } else {
+            expect(
+              await pageObject.text(pageObject.displayFirstNameSelector)
+            ).toBe(data.expectedFirstName);
+
+            expect(await pageObject.text(pageObject.displayAgeSelector)).toBe(
+              data.expectedAge
+            );
+
+            expect(
+              await pageObject.text(pageObject.displayIsStudentSelector)
+            ).toBe(data.expectedIsStudent);
+          }
+        } else {
+          expect(await pageObject.text(pageObject.emptyFieldError)).toBe(data.expectedErrorText);
+        }
+
+        console.log(data.expectedIsStudent);
       });
     }
   }
 
-
 });
+
+

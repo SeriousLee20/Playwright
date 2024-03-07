@@ -10,4 +10,8 @@ export class Input{
     async setInputValue(selector: string, value: string){
         await this.page.locator(selector).fill(value);
     }
+
+    async setInputWithPlaceholder(placeholder: string, value: string){
+        await this.page.getByPlaceholder(placeholder).fill(value);
+    }
 }
