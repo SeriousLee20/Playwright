@@ -52,9 +52,12 @@ test('Confirm Alert', async({page, popup}) => {
     //     })
     // })
 
-    // await popup.handlingTwoContinuousDialog('Are you sure you want to proceed?', 'You clicked OK.');
-    await popup.handlingDialog('Are you sure you want to proceed?');
-    await popup.handlingDialog('You clicked OK.');
+
+    await popup.handlingTwoContinuousDialog('Are you sure you want to proceed?', 'You clicked OK.');
+
+    // doesnt work
+    // await popup.handlingDialog('Are you sure you want to proceed?');
+    // await popup.handlingDialog('You clicked OK.');
 
     await page.click('#show-confirm');
 

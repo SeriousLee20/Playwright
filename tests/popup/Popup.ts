@@ -19,6 +19,7 @@ export class Popup {
   async handlingTwoContinuousDialog(message1: string, message2: string) {
     let alertMessage: string;
 
+    // should not have await infront of accept dialog step, so can complete two times of accept
     this.page.once("dialog", async (dialog) => {
       alertMessage = dialog.message();
       expect(dialog.type()).toBe("confirm");
