@@ -37,22 +37,5 @@ export class Popup {
         dialog.accept();
       });
     });
-
-    // this.page.once('dialog', async(dialog)=> {
-    //     // expect(dialog.type()).toBe('confirm');
-    //     alertMessage = dialog.message();
-    //     await this.page.waitForTimeout(1000);
-    //     expect(alertMessage).toBe(message1);
-    //     console.log("1", alertMessage,dialog.type())
-    //     dialog.accept();
-    //     this.page.once('dialog', async(dialog)=> {
-    //         // expect(dialog.type()).toBe('alert');
-    //         alertMessage = dialog.message();
-    //         await this.page.waitForTimeout(1000);
-    //         expect(alertMessage).toBe(message2);
-    //         console.log("2", alertMessage, dialog.type())
-    //         dialog.accept();
-    //     })
-    // })
   }
 }
