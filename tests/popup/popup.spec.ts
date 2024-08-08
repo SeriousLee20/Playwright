@@ -4,16 +4,27 @@ test('Handling Alerts', async({page}) =>{
     await page.goto('file:/Users/amber/Documents/Testing/Playwright/tests/popup/index.html');
     let alertMessage = '';
 
-    page.on('dialog', async(dialog)=>{
+    page.once('dialog', async(dialog)=>{
         alertMessage = dialog.message();
         expect(dialog.type()).toBe('alert');
+        expect( alertMessage).toBe('This is a simple alert.');
         await page.waitForTimeout(1000);
         await dialog.accept();
+        console.log("1", alertMessage,dialog.type())
     })
 
     await page.click('#show-alert');
 
-    expect( alertMessage).toBe('This is a simple alert.');
+    page.once('dialog', async(dialog)=>{
+        alertMessage = dialog.message();
+        expect(dialog.type()).toBe('alert');
+        expect( alertMessage).toBe('This is a simple alert.');
+        await page.waitForTimeout(1000);
+        await dialog.accept();
+        console.log("2", alertMessage,dialog.type())
+    })
+    await page.click('#show-alert');
+
 })
 
 test('Confirm Alert', async({page}) => {
@@ -21,15 +32,25 @@ test('Confirm Alert', async({page}) => {
     let alertMessage = '';
 
     // how to handle multiple dialog?
-    page.on('dialog', async(dialog)=> {
+    page.once('dialog', async(dialog)=> {
         // expect(dialog.type()).toBe('confirm');
         alertMessage = dialog.message();
         await page.waitForTimeout(1000);
-        dialog.dismiss();
+        expect(alertMessage).toBe('Are you sure you want to proceed?');
+        console.log("1", alertMessage,dialog.type())
+        dialog.accept();
+        page.once('dialog', async(dialog)=> {
+            // expect(dialog.type()).toBe('confirm');
+            alertMessage = dialog.message();
+            await page.waitForTimeout(1000);
+            expect(alertMessage).toBe('You clicked OK.');
+            console.log("2", alertMessage, dialog.type())
+            dialog.accept();
+        })
     })
 
     await page.click('#show-confirm');
-    expect(alertMessage).toBe('You clicked Cancel.');
+
 })
 
 test('Handling Popup', async({page})=>{
