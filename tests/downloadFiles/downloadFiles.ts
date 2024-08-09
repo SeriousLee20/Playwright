@@ -2,11 +2,13 @@
 
 // Import the 'fs' module with promises support for file system operations
 import fs from "fs/promises";
+import { readFileSync } from "fs";
 // Import the 'xlsx' library for working with Excel files
 import XLSX from "xlsx";
 // Import the 'pdf-parse' library for parsing text from PDF files
 import pdfParse from "pdf-parse";
 import { Page, expect } from "@playwright/test";
+import { parse } from "csv-parse/sync";
 // // Import the PostgreSQL connection setup from the '../Database/database-setup' file
 // import { postgreSQL } from '../Database/database-setup';
 
@@ -14,10 +16,10 @@ import { Page, expect } from "@playwright/test";
 export const downloadFile = async (
   page: Page,
   buttonSelector: string,
-  fileType: "pdf" | "xlsx"
+  fileType: "pdf" | "xlsx" | "csv"
 ) => {
   // Build the button name based on the fileType and click it on the page
-  const buttonName = `EXPORT ${fileType === "pdf" ? "PDF" : "XLSX"}`;
+  // const buttonName = `EXPORT ${fileType === "pdf" ? "PDF" : "XLSX"}`;
   const [download] = await Promise.all([
     page.waitForEvent("download"),
     await page.locator(buttonSelector).click(),
@@ -45,6 +47,10 @@ export const readFileContent = async ({ extension, filePath }) => {
     // Delete the pdf file
     await fs.unlink(filePath);
     return data.text;
+  } else if (extension === "csv") {
+    const csvData = readFileSync(filePath, "utf8");
+    const testData = parse(csvData, { columns: true });
+    return testData;
   }
 };
 // Define a class named 'FILES' with methods for handling XLSX and PDF files
@@ -59,7 +65,7 @@ export default class FILES {
       filePath: "./downloads/file.xlsx",
     })) as string;
 
-    console.log(jsonData)
+    console.log(jsonData);
     // // Query PostgreSQL database to retrieve data
     // const result = await postgreSQL(
     //   `SELECT sampleid, method, operator, devicename, comments, serialnumber FROM device WHERE serial_number`
@@ -124,5 +130,29 @@ export default class FILES {
     // expect(pdfText).toContain(`Equipment Name ${result.devicename}`);
     // expect(pdfText).toContain(`Run Comment ${result.comments}`);
     // expect(pdfText).toContain("Equipment Information");
+  }
+
+  async CSV(page: Page, buttonSelector: string, filePath: string) {
+    await downloadFile(page, buttonSelector, "csv");
+
+    // const csvData = readFileSync(filePath, 'utf8');
+    // const testData = parse(csvData, { columns: true });
+
+    const csvData = (await readFileContent({
+      extension: "csv",
+      filePath: "./downloads/file.pdf",
+    })) as any;
+
+    console.log(csvData);
+
+    expect(csvData).toContainEqual({
+      Location: "Bell Rock Lighthouse",
+      "Latitude / Longitude": "56.43416667,-2.387222222",
+    });
+    // for (const row of csvData) {
+    //   // Use the data from the CSV file
+    //   console.log(`Name of User=> ${row.Name}`);
+    //   console.log(`Age of User=> ${row.Age}`);
+    // }
   }
 }
